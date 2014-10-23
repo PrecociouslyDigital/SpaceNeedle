@@ -19,16 +19,13 @@ public class SpaceNeedle {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int[] inputs = new int[6];
+        int[] inputs = new int[4];
         inputs[0] = Integer.parseInt(prompt("tower Width?"));
         inputs[1] = Integer.parseInt(prompt("tower Height?"));
-        inputs[2] = Integer.parseInt(prompt("top Width?"));
-        inputs[3] = Integer.parseInt(prompt("base Width?"));
-        inputs[4] = Integer.parseInt(prompt("spire Height?"));
-        inputs[5] = Integer.parseInt(prompt("thing Height?"));
-        ArrayList<String> toDraw = drawSpaceNeedle(inputs[0], inputs[1], inputs[2], inputs[3], inputs[4], inputs[5]);
-        for(String s : toDraw)
-            System.out.println(s);
+        inputs[2] = Integer.parseInt(prompt("spire Height?"));
+        inputs[3] = Integer.parseInt(prompt("thing Height?"));
+        String toDraw = drawSpaceNeedle(inputs[0], inputs[1], inputs[2], inputs[3]);
+        System.out.println(toDraw)
     }
     public static String prompt(String prompt){
         Scanner sc = new Scanner(System.in);
@@ -36,84 +33,47 @@ public class SpaceNeedle {
         return sc.nextLine();
     }
 
-    public static ArrayList<String> drawSpaceNeedle(int towerWidth, int towerHeight, int topWidth, int baseWidth, int spireHeight, int thingHeight) {
-    	ArrayList<String> total = new ArrayList<>();
-    	total.addAll(spire(spireHeight, topWidth));
-        total.addAll(recursiveTop(topWidth*2, topWidth*2));
-        String draw = "|";
-        for(int i = 0; i < topWidth; i++)
-            draw += "\"\"\"\"\"\"";
-        draw += "|";
-        total.add(draw);
-        total.addAll(recursiveBottom(topWidth*3, 0));
-        total.addAll(spire(thingHeight, topWidth));
-        total.addAll(tower(towerHeight, towerWidth));
-        total.addAll(recursiveTop(baseWidth, baseWidth));
-        return total;
+    public static String drawSpaceNeedle(int spireHeight, int towerHeight, int towerWidth, int thingHeight) {
+    	String total = spire(spireHeight);
+    	total += "      _/||\\_\n"+
+    	         "    _/**||**\\_\n"+
+    	         "  _/****||****\\_\n"+
+    	         "|\"\"\"\"\"\"\"\"\"\"\"\"\"\"|"+
+    	         "\\_\"\"\"\"\"\"\"\"\"\"\"\"_/"+
+    	         " \\_\"\"\"\"\"\"\"\"\"\"\"_/"+
+    	         "  \\_\"\"\"\"\"\"\"\"\"\"_/"+
+    	         "   \\_\"\"\"\"\"\"\"\"\"_/"+
+    	         "    \\_\"\"\"\"\"\"\"\"_/"+
+    	         "     \\_\"\"\"\"\"\"\"_/"+
+    	         "      \\_\"\"\"\"\"\"_/"+
+    	         "       \\_\"\"\"\"\"_/"+
+    	         "        \\_\"\"\"\"_/"+
+    	         "         \\_\"\"_/";
+    	 total += spire(thingHeight);
+    	 total += tower(towerHeight, towerWidth);
+    	 total +="      _/||\\_\n"+
+    	         "    _/**||**\\_\n"+
+    	         "  _/****||****\\_\n";
+    	         
     }
-    public static ArrayList<String> spire(int spireHeight, int topWidth){
-        ArrayList<String> total = new ArrayList<>();	
+    public static String spire(int spireHeight){
+        String total = "";	
         for(int i = 0; i < spireHeight-1; i++){
-            String draw = "";
-    		for(int j = 0; j < topWidth * 6; j++){
-    			draw = draw + " ";
-    		}
-            total.add(draw);
+            total += "        ||\n"
     	}
         return total;
     }
-    public static ArrayList<String> recursiveTop(int length, int space){
-        if(length == 1){
-            return new ArrayList<String>();
-        }else{
-        ArrayList tot = new ArrayList<>();
-        tot.addAll(recursiveTop(length-1,space+1));
-        String total = "";
-        for(int i = 0; i < space; i++)
-            total+="   ";
-        total+= "_/";
-        for(int i = 0; i < length; i++){
-            total+=":::";
-        }
-        total += "||";
-        for(int i = 0; i < length; i++){
-            total+=":::";
-        }
-        total += "\\_";
-        return tot;
-        }
-    }
-    public static ArrayList<String> recursiveBottom(int length, int space){
-        if(length == 1){
-            return new ArrayList<String>();
-        }else{
-            
-        ArrayList<String> total = new ArrayList<>();
-        String tot = "";
-        for(int i = 0; i < space; i++)
-            tot+="  ";
-        tot += "\\_";
-        
-        for(int i = 0; i<length-1; i += 2){
-            tot +="/\\";
-        }
-        tot+="_/";
-        total.add(tot);
-        total.addAll(recursiveBottom(length-1, space+1));
-        return total;
-        }
-    }
-    public static ArrayList<String> tower(int height, int width){
-         ArrayList<String> total = new ArrayList<>();
-         String draw = "|";
-         for(int i = 0; i < width; i++)
-             draw+="%";
-         draw+="|";
-         for(int i = 0; i < width; i++)
-             draw+="%";
-         draw+="|";
-         for(int i = 0; i < height; i++)
-            total.add(draw);
+    public static String tower(int height, int width){
+         String total =  "";
+         String given = "";
+        for(int i = 0; i < 6-width)
+            given += " ";
+        given +="|";
+        for(int i = 0; i < width;i++)
+            given+="%";
+        given +="|\n";
+        for(int i = 0; i < height; i++)
+            total+= given;
          return total;
     }
 }
